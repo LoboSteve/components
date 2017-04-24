@@ -1,0 +1,513 @@
+<div class="content-section">
+    <div>
+        <span class="feature-title">Dropdown</span>
+        <span>Dropdown is used to select an item from a collection of options. Custom content support and filtering are the notable features.</span>
+    </div>
+</div>
+
+<div class="content-section implementation">
+  <h3 class="first">Single</h3>
+   <sa-dropdown [options]="cities" [(ngModel)]="selectedCity" placeholder="Select a City"></sa-dropdown>
+   <p>Selected City: {{selectedCity ? selectedCity.name : 'none'}}</p>
+   
+   <h3>Editable</h3>
+   <sa-dropdown [options]="cars" [(ngModel)]="selectedCar" [style]="{'width':'150px'}" editable="editable" placeholder="Select a Brand"></sa-dropdown>
+   <p>Selected Car: {{selectedCar||'none'}}</p>
+       
+    <h3>Filter options</h3>
+    <sa-dropdown [options]="cities" [(ngModel)]="selectedCity2" [style]="{'width':'150px'}" filter="filter" placeholder="Select a City">
+        <ng-template let-city pTemplate="item">
+            <div class="ui-helper-clearfix" style="position: relative;height: 25px;">
+                <div style="font-size:14px;float:left;margin-top:4px">{{city?.value?.name}}</div>
+                <div style="font-size:13px;float:right;margin-top:4px">{{city?.value?.code}}</div>
+            </div>
+        </ng-template>
+    </sa-dropdown>
+    <p>Selected City: {{selectedCity2 ? selectedCity2.name : 'none'}}</p>
+
+   <h3>Data as an Array of Strings</h3>    
+   <sa-dropdown [data]="carBrands" filter="true" [(ngModel)]="selectedCar2" [style]="{'width':'150px'}" placeholder="Select a Brand"></sa-dropdown>
+   <p>Selected Brand: {{selectedCar2 || 'none'}}</p>
+      
+   <h3>Data as an Array of Custom Objects</h3>    
+   <sa-dropdown [data]="citiesLst" label-field="name" filter="true" [(ngModel)]="selectedCity3" [style]="{'width':'150px'}" placeholder="Select a City"></sa-dropdown>
+   <p>Selected City: {{selectedCity3 ? selectedCity3.name : 'none'}}</p>
+      
+   <h3>Data as an Array of Custom Objects loaded from a URL</h3>    
+   <sa-dropdown [data]="config" label-field="name" filter="true" [(ngModel)]="selectedCity4" [style]="{'width':'150px'}" placeholder="Select a City"></sa-dropdown>
+   <p>Selected City: {{selectedCity4 ? selectedCity4.name :'none'}}</p>
+      
+   <h3>Data as a function returning an Array of Custom Objects</h3>    
+   <sa-dropdown [data]="dataFn" label-field="name" filter="true" [(ngModel)]="selectedCar3" [style]="{'width':'150px'}" placeholder="Select a Car"></sa-dropdown>
+   <p>Selected Car: {{selectedCar3 ? selectedCar3.name :'none'}}</p>
+
+</div>
+
+<div class="content-section source">
+    <p-tabView effect="fade">
+        <p-tabPanel header="Documentation">
+            <h3>Import</h3>
+<pre>
+<code class="language-typescript" pCode>
+import &#123;DropdownModule&#125; from '&#123;path&#125;/components/dropdown/dropdown';
+</code>
+</pre>
+
+            <h3>Getting Started</h3>
+            <p>Two-way value binding is defined using ngModel and dropdown requires a collection of options 
+                where each option should follow the DropdownOption interface that defines label-value properties as shown in the example below.</p>
+<pre>
+<code class="language-markup" pCode>
+&lt;sa-dropdown [options]="cities" [(ngModel)]="selectedCity"&gt;&lt;/sa-dropdown&gt;
+</code>
+</pre>
+
+<pre>
+<code class="language-typescript" pCode>
+import &#123;DropdownOption&#125; from 'sang/components/dropdown/dropdown';
+
+export class MyModel &#123;
+
+    cities: DropdownOption[];
+
+    selectedCity: string;
+
+    constructor() &#123;
+        //Array of Objects implementing DropdownOption interface
+        this.cities = [
+            &#123;label:'Select City', value:null&#125;,
+            &#123;label:'New York', value:&#123;id:1, name: 'New York', code: 'NY'&#125;&#125;,
+            &#123;label:'Rome', value:&#123;id:2, name: 'Rome', code: 'RM'&#125;},
+            &#123;label:'London', value:&#123;id:3, name: 'London', code: 'LDN'&#125;},
+            &#123;label:'Istanbul', value:&#123;id:4, name: 'Istanbul', code: 'IST'&#125;},
+            &#123;label:'Paris', value:&#123;id:5, name: 'Paris', code: 'PRS'&#125;&#125;,
+        ];    
+    &#125;
+
+&#125;
+</code>
+</pre>
+
+<p>What do you do if you are have an array of strings or of custom objects that are also used elsewhere in your project? You do not need to modify this array to implement DropdownOption. You could simply pass it using the data attribute of the Dropdown.</p>
+<pre>
+<code class="language-markup" pCode>
+&lt;sa-dropdown [data]="carBrands" [(ngModel)]="selectedCity"&gt;&lt;/sa-dropdown&gt;
+</code>
+</pre>
+
+<pre>
+<code class="language-typescript" pCode>
+import &#123;DropdownOption&#125; from '&#123;path&#125;/components/dropdown/dropdown';
+
+export class MyModel &#123;
+
+    carBrands: string[];
+
+    selectedCity: string;
+
+    constructor() &#123;
+        //Array of String
+        this.carBrands = ['Audi', 'BMW', 'Fiat', 'Ford', 'Honda', 'Jaguar', 'Mercedes', 'Renault', 'VW', 'Volvo'];    
+    &#125;
+
+&#125;
+</code>
+</pre>
+<p>Besides an Array, the data attribute also accepts a Request Object configured with details required to make a http request to fetch the array to be used to create the dropdon options or a function that returns an Observable of an array.</p>
+
+            <h3>Model Driven Forms</h3>
+            <p>Dropdown can be used in a model driven form as well.</p>
+<pre>
+<code class="language-markup" pCode>
+&lt;sa-dropdown [options]="cities" formControlName="selectedCity"&gt;&lt;/sa-dropdown&gt;
+</code>
+</pre>
+
+            <h3>Filtering</h3>
+            <p>Options can be filtered using an input field in the overlay by enabling the filter property.</p>
+<pre>
+<code class="language-markup" pCode>
+&lt;sa-dropdown [options]="cities" [(ngModel)]="selectedCity" [filter]="true"&gt;&lt;/sa-dropdown&gt;
+</code>
+</pre>
+
+            <h3>Custom Content</h3>
+            <p>Label of an option is used as the display text of an item by default, for custom content support define a ng-template that gets the DropdownOption as the local ng-template variable.</p>
+<pre>
+<code class="language-markup" pCode ngNonBindable>
+&lt;sa-dropdown [options]="cars" [(ngModel)]="selectedCar" [style]="&#123;'width':'150px'&#125;"&gt;
+    &lt;ng-template let-car pTemplate="item"&gt;
+        &lt;div class="ui-helper-clearfix" style="position: relative;height: 25px;"&gt;
+            &lt;div style="font-size:14px;float:left;margin-top:4px"&gt;{{city?.value?.name}}&lt;/div&gt;
+            &lt;div style="font-size:13px;float:right;margin-top:4px"&gt;{{city?.value?.code}}&lt;/div&gt;            
+        &lt;/div&gt;
+    &lt;/ng-template&gt;
+&lt;/sa-dropdown&gt;
+</code>
+</pre>
+
+<pre>
+<code class="language-typescript" pCode>
+import &#123;DropdownOption&#125; from '&#123;path&#125;/components/dropdown/dropdown';
+
+export class MyModel &#123;
+
+    cars: DropdownOption[];
+
+    selectedCar: string;
+
+    constructor() &#123;
+        //Array of Objects implementing DropdownOption interface
+        this.cars = [
+            &#123;label: 'Audi', value: 'Audi'&#125;,
+            &#123;label: 'BMW', value: 'BMW'&#125;,
+            &#123;label: 'Fiat', value: 'Fiat'&#125;,
+            &#123;label: 'Ford', value: 'Ford'&#125;,
+            &#123;label: 'Honda', value: 'Honda'&#125;,
+            &#123;label: 'Jaguar', value: 'Jaguar'&#125;,
+            &#123;label: 'Mercedes', value: 'Mercedes'&#125;,
+            &#123;label: 'Renault', value: 'Renault'&#125;,
+            &#123;label: 'VW', value: 'VW'&#125;,
+            &#123;label: 'Volvo', value: 'Volvo'&#125;
+        ];
+    &#125;
+&#125;
+</code>
+</pre>
+
+            <h3>Attributes</h3>
+            <div class="doc-tablewrapper">
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Default</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>options</td>
+                            <td>array</td>
+                            <td>null</td>
+                            <td>An array of DropdownOptions to display as the available options.</td>                            
+                        </tr>
+                        <tr>
+                            <td>data</td>
+                            <td>array | Function | Request</td>
+                            <td>null</td>
+                            <td>An array of strings or custom objects not implementing DropdownOption interface to display as the available options.<br>
+                                OR<br>
+                                A Request Object with details to fetch data from a url.
+                                OR<br>
+                                A function returning an Observable of an array.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>label-field</td>
+                            <td>string</td>
+                            <td>null</td>
+                            <td>To be used along with data to specify the field of the object to be used as a label/caption of the option, incase of an array of objects.<br>Note: Incase of an array of string label-field is not to be used.</td>                            
+                        </tr>
+                        <tr>
+                            <td>scrollHeight</td>
+                            <td>string</td>
+                            <td>200px</td>
+                            <td>Height of the viewport in pixels, a scrollbar is defined if height of list exceeds this value.</td>
+                        </tr>
+                        <tr>
+                            <td>style</td>
+                            <td>string</td>
+                            <td>null</td>
+                            <td>Inline style of the element.</td>
+                        </tr>
+                        <tr>
+                            <td>panelStyle</td>
+                            <td>string</td>
+                            <td>null</td>
+                            <td>Inline style of the overlay panel element.</td>
+                        </tr>
+                        <tr>
+                            <td>styleClass</td>
+                            <td>string</td>
+                            <td>null</td>
+                            <td>Style class of the element.</td>
+                        </tr>
+                        <tr>
+                            <td>panelStyleClass</td>
+                            <td>string</td>
+                            <td>null</td>
+                            <td>Style class of the overlay panel element.</td>
+                        </tr>
+                        <tr>
+                            <td>filter</td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>When specified, displays an input field to filter the items on keyup.</td>
+                        </tr>
+                        <tr>
+                            <td>autoWidth</td>
+                            <td>boolean</td>
+                            <td>true</td>
+                            <td>Calculates the width based on options width, set to false for custom width.</td>
+                        </tr>
+                        <tr>
+                            <td>required</td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>When present, it specifies that an input field must be filled out before submitting the form.</td>
+                        </tr>
+                        <tr>
+                            <td>disabled</td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>When present, it specifies that the component should be disabled.</td>
+                        </tr>
+                        <tr>
+                            <td>editable</td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>When present, custom value instead of predefined options can be entered using the editable input field.</td>
+                        </tr>
+                        <tr>
+                            <td>appendTo</td>
+                            <td>any</td>
+                            <td>null</td>
+                            <td>Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element.</td>
+                        </tr>
+                        <tr>
+                            <td>tabindex</td>
+                            <td>number</td>
+                            <td>null</td>
+                            <td>Index of the element in tabbing order.</td>
+                        </tr>
+                        <tr>
+                            <td>placeholder</td>
+                            <td>string</td>
+                            <td>null</td>
+                            <td>Default text to display when no option is selected.</td>
+                        </tr>
+                        <tr>
+                            <td>inputId</td>
+                            <td>string</td>
+                            <td>null</td>
+                            <td>Identifier of the focus input to match a label defined for the dropdown.</td>
+                        </tr>
+                        <tr>
+                            <td>dataKey</td>
+                            <td>string</td>
+                            <td>null</td>
+                            <td>A property to uniquely identify a value in options.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Events</h3>
+            <div class="doc-tablewrapper">
+                <table class="doc-table">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Parameters</th>
+                        <th>Description</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>onChange</td>
+                            <td>event.originalEvent: Browser event<br />
+                                event.value: Selected option value
+                            </td>
+                            <td>Callback to invoke when value of dropdown changes.</td>
+                        </tr>
+                        <tr>
+                            <td>onFocus</td>
+                            <td>event: Browser event</td>
+                            <td>Callback to invoke when dropdown gets focus.</td>
+                        </tr>
+                        <tr>
+                            <td>onBlur</td>
+                            <td>event: Browser event</td>
+                            <td>Callback to invoke when dropdown loses focus.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Styling</h3>
+            <p>Following is the list of structural style classes.</p>
+            <div class="doc-tablewrapper">
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Element</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>ui-dropdown</td>
+                            <td>Container element.</td>
+                        </tr>
+                        <tr>
+                            <td>ui-dropdown-label</td>
+                            <td>Element to display label of selected option.</td>
+                        </tr>
+                        <tr>
+                            <td>ui-dropdown-trigger</td>
+                            <td>Icon element.</td>
+                        </tr>
+                        <tr>
+                            <td>ui-dropdown-panel</td>
+                            <td>Icon element.</td>
+                        </tr>
+                        <tr>
+                            <td>ui-dropdown-items-wrapper</td>
+                            <td>Wrapper element of items list.</td>
+                        </tr>
+                        <tr>
+                            <td>ui-dropdown-items</td>
+                            <td>List element of items.</td>
+                        </tr>
+                        <tr>
+                            <td>ui-dropdown-item</td>
+                            <td>An item in the list.</td>
+                        </tr>
+                        <tr>
+                            <td>ui-dropdown-filter-container</td>
+                            <td>Container of filter input.</td>
+                        </tr>
+                        <tr>
+                            <td>ui-dropdown-filter</td>
+                            <td>Filter element.</td>
+                        </tr>
+                        <tr>
+                            <td>ui-dropdown-open</td>
+                            <td>Container element when overlay is visible.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Dependencies</h3>
+            <p>None.</p>
+        </p-tabPanel>
+
+        <p-tabPanel header="Source">
+<pre>
+<code class="language-markup" pCode ngNonBindable>
+&lt;h3 class="first"&gt;Single&lt;/h3&gt;
+&lt;sa-dropdown [options]="cities" [(ngModel)]="selectedCity" placeholder="Select a City"&gt;&lt;/sa-dropdown&gt;
+&lt;p&gt;Selected City: {{selectedCity ? selectedCity.name : 'none'}}&lt;/p&gt;
+
+&lt;h3&gt;Editable&lt;/h3&gt;
+&lt;sa-dropdown [options]="cars" [(ngModel)]="selectedCar" [style]="&#123;'width':'150px'&#125;" editable="editable" placeholder="Select a Brand"&gt;&lt;/sa-dropdown&gt;
+&lt;p&gt;Selected Car: {{selectedCar||'none'}}&lt;/p&gt;
+
+&lt;h3&gt;Filter options&lt;/h3&gt;
+&lt;sa-dropdown [options]="cars" [(ngModel)]="selectedCar2" [style]="&#123;'width':'150px'&#125;" filter="true"&gt;
+    &lt;ng-template let-car pTemplate="item"&gt;
+        &lt;div class="ui-helper-clearfix" style="position: relative;height: 25px;"&gt;
+            &lt;div style="font-size:14px;float:left;margin-top:4px"&gt;{{city?.value?.name}}&lt;/div&gt;
+            &lt;div style="font-size:13px;float:right;margin-top:4px"&gt;{{city?.value?.code}}&lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/ng-template&gt;
+&lt;/sa-dropdown&gt;
+&lt;p&gt;Selected Car: {{selectedCar2||'none'}}&lt;/p&gt;
+
+&lt;h3&gt;Data as an Array of Strings&lt;/h3&gt;    
+&lt;sa-dropdown [data]="carBrands" label-field="name" filter="true" [(ngModel)]="selectedCar2" [style]="&#123;'width':'150px'&#125;" placeholder="Select a Brand"&gt;&lt;/sa-dropdown&gt;
+&lt;p&gt;Selected Brand: {{selectedCar2 || 'none'}}&lt;/p&gt;
+
+&lt;h3&gt;Data as an Array of Custom Objects&lt;/h3&gt;    
+&lt;sa-dropdown [data]="citiesLst" label-field="name" filter="true" [(ngModel)]="selectedCity3" [style]="&#123;'width':'150px'&#125;" placeholder="Select a City"&gt;&lt;/sa-dropdown&gt;
+&lt;p&gt;Selected City: {{selectedCity3 ? selectedCity3.name : 'none'}}&lt;/p&gt;
+
+&lt;h3&gt;Data as an Array of Custom Objects loaded from a URL&lt;/h3&gt;    
+&lt;sa-dropdown [data]="config" label-field="name" filter="true" [(ngModel)]="selectedCity4" [style]="&#123;'width':'150px'&#125;" placeholder="Select a City"&gt;&lt;/sa-dropdown&gt;
+&lt;p&gt;Selected City: {{selectedCity4 ? selectedCity4.name :'none'}}&lt;/p&gt;
+
+&lt;h3&gt;Data as a function returning an Array of Custom Objects&lt;/h3&gt;    
+&lt;sa-dropdown [data]="dataFn" label-field="name" filter="true" [(ngModel)]="selectedCar3" [style]="&#123;'width':'150px'&#125;" placeholder="Select a Car"&gt;&lt;/sa-dropdown&gt;
+&lt;p&gt;Selected Car: {{selectedCar3 ? selectedCar3.name :'none'}}&lt;/p&gt;
+</code>
+</pre>
+
+<pre>
+<code class="language-typescript" pCode>
+export class DropdownDemo &#123;
+
+    cities: DropdownOption[];
+
+    selectedCity: string;
+    selectedCity2: string;
+    selectedCity3: string;
+    selectedCity4: string;
+
+    cars: DropdownOption[];
+
+    selectedCar: string = 'BMW';
+    selectedCar2: string;
+
+    constructor() &#123;
+        //Array of Objects implementing DropdownOption interface
+        this.cities = [
+            &#123;label:'New York', value:&#123;id:1, name: 'New York', code: 'NY'}},
+            &#123;label:'Rome', value:&#123;id:2, name: 'Rome', code: 'RM'}},
+            &#123;label:'London', value:&#123;id:3, name: 'London', code: 'LDN'}},
+            &#123;label:'Istanbul', value:&#123;id:4, name: 'Istanbul', code: 'IST'}},
+            &#123;label:'Paris', value:&#123;id:5, name: 'Paris', code: 'PRS'}},
+        ];
+
+        //Array of Objects implementing DropdownOption interface
+        this.cars = [
+            &#123;label: 'Audi', value: 'Audi'&#125;,
+            &#123;label: 'BMW', value: 'BMW'&#125;,
+            &#123;label: 'Fiat', value: 'Fiat'&#125;,
+            &#123;label: 'Ford', value: 'Ford'&#125;,
+            &#123;label: 'Honda', value: 'Honda'&#125;,
+            &#123;label: 'Jaguar', value: 'Jaguar'&#125;,
+            &#123;label: 'Mercedes', value: 'Mercedes'&#125;,
+            &#123;label: 'Renault', value: 'Renault'&#125;,
+            &#123;label: 'VW', value: 'VW'&#125;,
+            &#123;label: 'Volvo', value: 'Volvo'&#125;
+        ];
+
+        //Array of String
+        this.carBrands = ['Audi', 'BMW', 'Fiat', 'Ford', 'Honda', 'Jaguar', 'Mercedes', 'Renault', 'VW', 'Volvo'];
+
+        //Array of Custom Objects
+        this.citiesLst = [
+            &#123;id:1, name: 'New York', code: 'NY'&#125;,
+            &#123;id:2, name: 'Rome', code: 'RM'&#125;,
+            &#123;id:3, name: 'London', code: 'LDN'&#125;,
+            &#123;id:4, name: 'Istanbul', code: 'IST'&#125;,
+            &#123;id:5, name: 'Paris', code: 'PRS'&#125;
+        ];
+
+        //Configurations for fetching data using Request
+        this.config = new Request(&#123;
+                              method: RequestMethod.Get,
+                              url: './assets/demos/data/cities.json'
+                            &#125;);
+
+        //Function returning an Observable of an Array bound to the current context
+        this.dataFn = (function ()&#123;
+         var obs = Observable.create((observer) => &#123;
+            setTimeout(() => &#123;
+              observer.next(this.carBrands);
+              observer.complete();
+            &#125;, 1000);
+          &#125;);
+         return obs;
+      &#125;).bind(this);
+    &#125;
+
+&#125;
+</code>
+</pre>
+        </p-tabPanel>
+    </p-tabView>
+</div>
