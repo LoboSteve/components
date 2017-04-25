@@ -27,7 +27,7 @@
         "styles.css"
       ],
       "scripts": [
-
+        "assets/js/prism.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {
