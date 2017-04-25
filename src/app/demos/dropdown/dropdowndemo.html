@@ -88,7 +88,7 @@ export class MyModel &#123;
 </code>
 </pre>
 
-<p>What do you do if you are have an array of strings or of custom objects that are also used elsewhere in your project? You do not need to modify this array to implement DropdownOption. You could simply pass it using the data attribute of the Dropdown.</p>
+<p>What do you do if you have an array of strings or of custom objects that are also used elsewhere in your project? You do not need to modify this array to implement DropdownOption. You could simply pass it using the data attribute of the Dropdown.</p>
 <pre>
 <code class="language-markup" pCode>
 &lt;sa-dropdown [data]="carBrands" [(ngModel)]="selectedCity"&gt;&lt;/sa-dropdown&gt;
@@ -113,7 +113,7 @@ export class MyModel &#123;
 &#125;
 </code>
 </pre>
-<p>Besides an Array, the data attribute also accepts a Request Object configured with details required to make a http request to fetch the array to be used to create the dropdon options or a function that returns an Observable of an array.</p>
+<p>Besides an array, the data attribute also accepts a http Request object configured with details required to make a http request to fetch the array to be used to create the dropdon options or a function that returns an Observable of an array.</p>
 
             <h3>Model Driven Forms</h3>
             <p>Dropdown can be used in a model driven form as well.</p>
